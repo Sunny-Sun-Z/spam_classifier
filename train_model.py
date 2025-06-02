@@ -45,7 +45,8 @@ print("train_labels ", train_labels)
 vectorizer = TfidfVectorizer(
     lowercase=True,
     stop_words="english",
-    max_features = 1000   #limit to top 1000 words to speed up training
+    max_features = 1000,   #limit to top 1000 words to speed up training
+    ngram_range=(1, 2)      # Consider word pairs (e.g., "free prize")
 )
 X_train = vectorizer.fit_transform(train_emails)
 
@@ -54,7 +55,7 @@ model.fit(X_train, train_labels)
 
 # Saver model and Vecotroizor
 os.makedirs("model",exist_ok=True)
-with open("model/spam_classifier_tfidf.pkl", "wb") as f:
+with open("model/spam_classifier_tfidf_with_pairs.pkl", "wb") as f:
     pickle.dump((vectorizer, model), f)
     
 print(f"Model trained on {len(train_emails)} emails using TF-IDF and saved!")
